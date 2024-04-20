@@ -1,0 +1,5 @@
+Derived
+*.xcodeproj
+*.xcworkspace
+*.swiftpm
+*.idea

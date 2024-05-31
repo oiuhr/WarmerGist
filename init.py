@@ -7,12 +7,13 @@ import os
 def main():
     print("⚒️\tГенерируем проект")
 
+    cached_binaries_path = os.path.expanduser('~/.warmer')
     subprocess.call([
         'Sources/Packages/Common/WarmerDependencies/warm.py',
         '--tuist_executable_directory', './Tools/Tuist/tuist',
+        '--cached_binaries_directory', cached_binaries_path,
         '--dependency_manifest_directory', './Sources/Packages/Common/WarmerDependencies/.internal',
     ])
-    cached_binaries_path = os.path.expanduser('~/.cache/tuist-cloud/BinaryCache')
     subprocess.call([
         'Sources/Packages/Common/WarmerDependencies/write.py',
         '--cached_binaries_directory', cached_binaries_path,

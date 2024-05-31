@@ -33,7 +33,11 @@ args = parse_args()
 os.chdir(args.generated_manifest_directory)
 
 manifest_path = os.path.join('./.internal', 'Tuist', 'Package.swift')
-target_cache = args.cached_binaries_directory
+# Считаем сумму Package.swift файла для того, чтобы вытащить кеш с нужной хеш суммой.
+# Tuist умеет делать это самостоятельно, но внутри себя — в текущем формате нам нужно делать это на нашей стороне.
+manifest_hash = hashlib.md5(open(manifest_path, 'rb').read()).hexdigest()
+print('👺', manifest_hash)
+target_cache = os.path.join(args.cached_binaries_directory, manifest_hash)
 
 if not os.path.exists('./Caches'):
     os.makedirs('./Caches')

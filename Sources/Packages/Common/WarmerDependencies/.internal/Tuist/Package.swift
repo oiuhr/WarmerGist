@@ -2,6 +2,7 @@
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 // Xcode: 15.1
 // comment anywhere for hash change
+// change for bundle`s rebuild
 
 import PackageDescription
 

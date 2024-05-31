@@ -7,6 +7,11 @@
 
 import ProjectDescription
 
+// Скрипт, копирующий *.bundle директории из DD в директирию кеша.
+let script = """
+find $BUILT_PRODUCTS_DIR -maxdepth 1 -type d -name '*.bundle' -execdir cp -R "{}" $CACHED_BUNDLES_DIRECTORY ";"
+"""
+
 let project = Project(
     name: "_WarmerDependencies",
     options: .options(
@@ -31,6 +36,35 @@ let project = Project(
                 .external(name: "Lottie"),
                 .external(name: "SwiftMessages"),
             ]
+        ),
+        // Схема для генерации *.bundle директорий для статических фреймворков.
+        // Отдельно чтобы не билдить все остальное.
+        .target(
+            name: "_BundleDummy",
+            destinations: .iOS,
+            product: .app,
+            bundleId: "ru.oiu.warmer.demo.dependencies.bundles",
+            deploymentTargets: .iOS("15.0"),
+            dependencies: [
+                .external(name: "Lottie"),
+            ]
+        ),
+    ],
+    schemes: [
+        .scheme(
+            name: "Bundles",
+            buildAction: .buildAction(
+                targets: [
+                    .target("_BundleDummy"),
+                ],
+                postActions: [
+                    .executionAction(
+                        title: "Copy *.bundle`s to external folder",
+                        scriptText: script,
+                        target: .target("_BundleDummy")
+                    ),
+                ]
+            )
         ),
     ]
 )

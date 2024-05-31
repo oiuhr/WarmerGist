@@ -39,7 +39,13 @@ private extension Target {
     }
     
     static var resources: ResourceFileElements {
-        return .resources([
+        var bundles = [ResourceFileElement]()
+
+        if !Environment.warmerSources.getBoolean(default: false) {
+            bundles.append("\(Environment.bundles.getString(default: ""))")
+        }
+        
+        return .resources(bundles + [
             "Sources/Warmer/Resources/**",
         ])
     }

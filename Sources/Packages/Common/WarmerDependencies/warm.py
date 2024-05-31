@@ -3,6 +3,7 @@
 import argparse
 import hashlib
 import os
+import shutil
 import subprocess
 
 
@@ -27,6 +28,34 @@ def warm_binaries(args, cached_binaries_directory_for_manifest):
 def throw(code, directory_to_remove):
     subprocess.call(['rm', '-rf', directory_to_remove])
     exit(code)
+
+
+def warm_bundles(args, cached_binaries_directory_for_manifest):
+    bundles_directory = os.path.join(cached_binaries_directory_for_manifest, 'bundle-artifacts', "")
+    os.makedirs(bundles_directory)
+
+    # Ловится в пост-билд скрипте проекта, который собирает зависимости (ну и собственно бандлы).
+    # Сам пост-билд скрипт копирует в переданную папку из DD готовые бандлы для переиспользования.
+    os.environ['CACHED_BUNDLES_DIRECTORY'] = bundles_directory
+
+    generate_code = subprocess.call([
+        args.tuist_executable_directory, 'generate',
+        '--path', args.dependency_manifest_directory,
+        '--no-open'
+    ])
+    if not generate_code == 0:
+        throw(generate_code, cached_binaries_directory_for_manifest)
+
+    # Нам нужно сбилдить конкретную схему проекта, а в текущей версии tuist cache генерирует себе .xcworkspace
+    # и все ломает (не дает поймать схему). Сносим к чертям чтобы не мешал, он нам не нужен.
+    shutil.rmtree(f'{args.dependency_manifest_directory}/_WarmerDependencies.xcworkspace')
+
+    build_code = subprocess.call([
+        args.tuist_executable_directory, 'build',
+        '--path', args.dependency_manifest_directory
+    ])
+    if not build_code == 0:
+        throw(build_code, cached_binaries_directory_for_manifest)
 
 
 def parse_args():
@@ -63,6 +92,7 @@ def main():
     if not os.path.exists(cached_binaries_directory_for_manifest):
         os.environ['XDG_CACHE_HOME'] = cached_binaries_directory_for_manifest
         warm_binaries(args, cached_binaries_directory_for_manifest)
+        warm_bundles(args, cached_binaries_directory_for_manifest)
     else:
         print(f'Пропуск прогрева, найден кеш на {cached_binaries_directory_for_manifest}', flush=True)
 

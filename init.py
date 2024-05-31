@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import os
 import subprocess
 import os
 
@@ -19,7 +20,9 @@ def main():
         '--cached_binaries_directory', cached_binaries_path,
         '--generated_manifest_directory', './Sources/Packages/Common/WarmerDependencies'
     ])
-    subprocess.call(['Tools/Tuist/tuist', 'generate'])
+
+    os.environ['TUIST_BUNDLES'] = 'Sources/Packages/Common/WarmerDependencies/Caches/bundle-artifacts/*.bundle'
+    subprocess.call(['./Tools/Tuist/tuist', 'generate'])
 
 
 main()

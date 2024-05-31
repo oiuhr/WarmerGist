@@ -33,6 +33,12 @@ args = parse_args()
 os.chdir(args.generated_manifest_directory)
 
 manifest_path = os.path.join('./.internal', 'Tuist', 'Package.swift')
+
+if "SPM_WARMER_GENERATE_WITH_SOURCES" in os.environ:
+    print(f'🥷 Поймано значение окружения для генерации из сурсов: используем внутренний манифест', flush=True)
+    subprocess.call(['cp', f'{manifest_path}', './'])
+    exit(0)
+
 # Считаем сумму Package.swift файла для того, чтобы вытащить кеш с нужной хеш суммой.
 # Tuist умеет делать это самостоятельно, но внутри себя — в текущем формате нам нужно делать это на нашей стороне.
 manifest_hash = hashlib.md5(open(manifest_path, 'rb').read()).hexdigest()

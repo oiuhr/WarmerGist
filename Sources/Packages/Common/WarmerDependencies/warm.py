@@ -81,6 +81,10 @@ def parse_args():
 
 
 def main():
+    if "SPM_WARMER_GENERATE_WITH_SOURCES" in os.environ:
+        print(f'🥷 Поймано значение окружения для генерации из сурсов: пропуск прогрева зависимостей', flush=True)
+        exit(0)
+
     args = parse_args()
 
     manifest_path = os.path.join(args.dependency_manifest_directory, 'Tuist', 'Package.swift')

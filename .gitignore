@@ -5,3 +5,5 @@ Derived
 *.idea
 *.build
 *.resolved
+Sources/Packages/Common/WarmerDependencies/Caches
+Sources/Packages/Common/WarmerDependencies/Package.swift

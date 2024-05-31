@@ -31,7 +31,8 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/Alamofire/Alamofire.git",
-            exact: "5.9.1"
+//             exact: "5.9.1"
+            exact: "5.9.0"
         ),
         .package(
             url: "https://github.com/airbnb/lottie-ios.git",

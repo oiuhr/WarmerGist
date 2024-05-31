@@ -24,6 +24,7 @@ public extension Package {
             .featurePackage(name: "FeatureB"),
             .commonPackage(name: "WarmerCore"),
             .commonPackage(name: "WarmerUI"),
+            .commonPackage(name: "WarmerDependencies"),
         ]
     }
 }

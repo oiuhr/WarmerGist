@@ -3,3 +3,5 @@ Derived
 *.xcworkspace
 *.swiftpm
 *.idea
+*.build
+*.resolved

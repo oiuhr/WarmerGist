@@ -13,21 +13,13 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(
-            url: "https://github.com/airbnb/lottie-ios.git",
-            exact: "4.4.3"
-        ),
-        .package(
-            url: "https://github.com/SwiftKickMobile/SwiftMessages.git",
-            exact: "10.0.0"
-        ),
+        .package(path: "../WarmerDependencies"),
     ],
     targets: [
         .target(
             name: "WarmerUI",
             dependencies: [
-                "SwiftMessages",
-                .product(name: "Lottie", package: "lottie-ios"),
+                "WarmerDependencies"
             ]
         ),
     ]

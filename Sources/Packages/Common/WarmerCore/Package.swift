@@ -13,21 +13,13 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(
-            url: "https://github.com/apple/swift-async-algorithms.git",
-            exact: "1.0.0"
-        ),
-        .package(
-            url: "https://github.com/Alamofire/Alamofire.git",
-            exact: "5.9.1"
-        ),
+        .package(path: "../WarmerDependencies"),
     ],
     targets: [
         .target(
             name: "WarmerCore",
             dependencies: [
-                "Alamofire",
-                .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
+                "WarmerDependencies"
             ]
         ),
     ]
